@@ -39,7 +39,7 @@ class LinearRegressionClosedForm:
       2D numpy array of predicted target values. Dimensions (n x 1)
     '''
     # Write your code here
-      return X @ self.weights
+    return X @ self.weights
 
 def plot_learned_equation(X, y, y_hat):
     '''
