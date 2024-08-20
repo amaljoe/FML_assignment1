@@ -18,7 +18,10 @@ def transform_input(x):
       
     '''
     # Write your code here
-    raise NotImplementedError()
+    n = x.shape[0]
+    x = x.reshape(-1,1)
+    x = np.concatenate((x, x**2, np.cos(x)), axis=1)
+    return x
     
 def read_dataset(filepath):
     '''
@@ -39,7 +42,16 @@ def read_dataset(filepath):
       
     '''
     # Write your code here
-    raise NotImplementedError()
+    file = pd.read_csv(filepath)
+    X = file['x'].values.reshape(-1,1)
+    y = file['y'].values.reshape(-1,1)
+    n = X.shape[0]
+    n_train = int(0.9*n)
+    X_train = X[:n_train]
+    y_train = y[:n_train]
+    X_test = X[n_train:]
+    y_test = y[n_train:]
+    return X_train, y_train, X_test, y_test
 
 
 ############################################

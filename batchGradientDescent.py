@@ -50,9 +50,14 @@ class LinearRegressionBatchGD:
 
         # Complete the inner "for" loop to calculate the gradient of loss w.r.t weights, i.e. dw and update the weights
         # You should use "compute_gradient()"  function to calculate gradient.
+        f = X_batch @ self.weights
+        dw = self.compute_gradient(X_batch, y_batch, self.weights)
+        self.weights = self.weights - self.learning_rate * dw
 
 
       # After the inner "for" loop ends, calculate loss on the entire data using "compute_rmse_loss()" function and add the loss of each epoch to the "error list"
+      loss = self.compute_rmse_loss(X, y, self.weights)
+      self.error_list.append(loss)
 
       if np.linalg.norm(self.weights - prev_weights) < 1e-5:
         print(f" Stopping at epoch {epoch}.")
@@ -72,7 +77,7 @@ class LinearRegressionBatchGD:
       2D numpy array of predicted target values. Dimensions (n x 1)
     '''
     # Write your code here
-    raise NotImplementedError()
+    return X @ self.weights
 
   def compute_rmse_loss(self, X, y, weights):
     '''
@@ -87,7 +92,7 @@ class LinearRegressionBatchGD:
       loss : 2D numpy array of RMSE loss. float
     '''
     # Write your code here
-    raise NotImplementedError()
+    return np.sqrt(np.mean((y - X @ weights)**2))
 
   def compute_gradient(self, X, y, weights):
     '''
@@ -103,7 +108,7 @@ class LinearRegressionBatchGD:
     '''
     # Write your code here.
     # Note: Make sure you divide the gradient (dw) by the total number of training instances before returning to prevent "exploding gradients".
-    raise NotImplementedError()
+    return -2 * X.T @ (y - X @ weights) / X.shape[0]
 
 def plot_loss(error_list, total_epochs):
   '''
@@ -116,7 +121,11 @@ def plot_loss(error_list, total_epochs):
     None
   '''
   # Complete this function to plot the graph of losses stored in model's "error_list"
-  raise NotImplementedError()
+  plt.plot(np.arange(total_epochs), error_list)
+  plt.xlabel('Epochs')
+  plt.ylabel('Loss')
+  plt.title('Loss vs Epochs')
+  plt.show()
 
 def plot_learned_equation(X, y, y_hat):
     '''
@@ -132,7 +141,13 @@ def plot_learned_equation(X, y, y_hat):
     '''
     # Plot a 2d plot, with only  X[:,1] on x-axis (Think on why you can ignore X[:, 0])
     # Use y_hat to plot the line. DO NOT use y.
-    raise NotImplementedError()
+    plt.plot(X[:, 1], y_hat, label='Predicted line')
+    plt.scatter(X[:, 1], y, label='Data points', color='g')
+    plt.xlabel('X')
+    plt.ylabel('y')
+    plt.legend()
+    plt.title('Linear Regression with Batch Gradient Descent')
+    plt.show()
 
 ############################################
 #####        Helper functions          #####
